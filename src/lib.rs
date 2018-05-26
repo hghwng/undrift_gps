@@ -22,6 +22,7 @@ fn is_outside_china(lat: f64, lon: f64) -> bool {
     lat < 0.8293 || lat > 55.8271 || lon < 72.004 || lon > 137.8347
 }
 
+/// Convert a WGS-84 coordinate into GCJ-02
 pub fn wgs_to_gcj(lat: f64, lon: f64) -> (f64, f64) {
     /* Krasovsky 1940
         a = 6378245.0, 1/f = 298.3
@@ -45,6 +46,7 @@ pub fn wgs_to_gcj(lat: f64, lon: f64) -> (f64, f64) {
     (lat + lat_d, lon + lon_d)
 }
 
+/// Convert a GCJ-02 coordinate into WGS-84
 pub fn gcj_to_wgs(lat: f64, lon: f64) -> (f64, f64) {
     let gcj = (lat, lon);
     let mut wgs = gcj;
@@ -65,12 +67,14 @@ pub fn gcj_to_wgs(lat: f64, lon: f64) -> (f64, f64) {
     wgs
 }
 
+/// Convert a GCJ-02 coordinate into BD-09
 pub fn gcj_to_bd(lat: f64, lon: f64) -> (f64, f64) {
     let z = (lon * lon + lat * lat).sqrt() + 0.00002 * (PI_X * lat).sin();
     let theta = lat.atan2(lon) + 0.000003 * (PI_X * lon).cos();
     (z * theta.sin() + 0.006, z * theta.cos() + 0.0065)
 }
 
+/// Convert a BD-09 coordinate into GCJ-02
 pub fn bd_to_gcj(lat: f64, lon: f64) -> (f64, f64) {
     let (lat, lon) = (lat - 0.006, lon - 0.0065);
     let z = (lon * lon + lat * lat).sqrt() - 0.00002 * (PI_X * lat).sin();
