@@ -1,0 +1,6 @@
+[package]
+name = "undrift_gps"
+version = "0.1.0"
+authors = ["Hugh Wang <hghwng@gmail.com>"]
+
+[dependencies]
