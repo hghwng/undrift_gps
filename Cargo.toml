@@ -6,5 +6,6 @@ authors = ["Hugh Wang <hghwng@gmail.com>"]
 description = "Convert between various coordinate systems: GCJ-02, WGS-84 and BD-09"
 license = "MIT"
 repository = "https://github.com/hghwng/undrift_gps"
+documentation = "https://docs.rs/undrift_gps"
 
 [dependencies]
