@@ -82,6 +82,20 @@ pub fn bd_to_gcj(lat: f64, lon: f64) -> (f64, f64) {
     (z * theta.sin(), z * theta.cos())
 }
 
+/// Convert a BD-09 coordinate into WGS-84
+pub fn bd_to_wgs(lat: f64, lon: f64) -> (f64, f64) {
+    let (lat, lon) = bd_to_gcj(lat, lon);
+    let (lat, lon) = gcj_to_wgs(lat, lon);
+    (lat, lon)
+}
+
+/// Convert a WGS-84 coordinate into BD-09
+pub fn wgs_to_bd(lat: f64, lon: f64) -> (f64, f64) {
+    let (lat, lon) = wgs_to_gcj(lat, lon);
+    let (lat, lon) = gcj_to_bd(lat, lon);
+    (lat, lon)
+}
+
 #[cfg(test)]
 mod tests {
     fn loc_assert((x, y): (f64, f64), (p, q): (f64, f64)) {
