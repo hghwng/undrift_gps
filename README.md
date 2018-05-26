@@ -22,3 +22,12 @@ pub fn bd_to_gcj(lat: f64, lon: f64) -> (f64, f64)
 /// Convert a BD-09 coordinate into WGS-84
 pub fn bd_to_wgs(lat: f64, lon: f64) -> (f64, f64)
 ```
+
+# Usage
+
+Add this to your Cargo.toml:
+
+```toml
+[dependencies]
+undrift_gps = "0.1.1"
+```
