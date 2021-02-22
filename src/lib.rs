@@ -28,8 +28,8 @@ fn wgs_encrypt(x: f64, y: f64) -> (f64, f64) {
     (x_t, y_t)
 }
 
-fn is_outside_china(lat: f64, lon: f64) -> bool {
-    lat < 0.8293 || lat > 55.8271 || lon < 72.004 || lon > 137.8347
+fn is_inside_china(lat: f64, lon: f64) -> bool {
+    (0.8293..=55.8271).contains(&lat) && (72.004..=137.8347).contains(&lon)
 }
 
 /// Convert a WGS-84 coordinate into GCJ-02
@@ -40,9 +40,9 @@ pub fn wgs_to_gcj(lat: f64, lon: f64) -> (f64, f64) {
        ee = (a^2 - b^2) / a^2;
     */
     const A: f64 = 6378245.0;
-    const EE: f64 = 0.00669342162296594323;
+    const EE: f64 = 0.006_693_421_622_965_943;
 
-    if is_outside_china(lat, lon) {
+    if !is_inside_china(lat, lon) {
         return (lat, lon);
     }
 
