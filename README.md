@@ -16,6 +16,7 @@ pub fn wgs_to_gcj(lat: f64, lon: f64) -> (f64, f64)
 
 /// Convert a WGS-84 coordinate into BD-09
 pub fn wgs_to_bd(lat: f64, lon: f64) -> (f64, f64)
+
 /// Convert a BD-09 coordinate into GCJ-02
 pub fn bd_to_gcj(lat: f64, lon: f64) -> (f64, f64)
 
@@ -29,5 +30,5 @@ Add this to your Cargo.toml:
 
 ```toml
 [dependencies]
-undrift_gps = "0.1.1"
+undrift_gps = "0.2.1"
 ```

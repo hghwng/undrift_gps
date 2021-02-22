@@ -7,12 +7,22 @@ fn wgs_encrypt(x: f64, y: f64) -> (f64, f64) {
 
     let x_p = 20.0 * (PI * x).sin() + 40.0 * (PI / 3.0 * x).sin();
     let x_q = 160.0 * (PI / 12.0 * x).sin() + 320.0 * (PI / 30.0 * x).sin();
-    let x_t = -100.0 + 2.0 * y + 3.0 * x + 0.2 * x * x + 0.1 * x * y + 0.2 * y.abs().sqrt()
+    let x_t = -100.0
+        + 2.0 * y
+        + 3.0 * x
+        + 0.2 * x * x
+        + 0.1 * x * y
+        + 0.2 * y.abs().sqrt()
         + 2.0 / 3.0 * (r + x_p + x_q);
 
     let y_p = 20.0 * (PI * y).sin() + 40.0 * (PI / 3.0 * y).sin();
     let y_q = 150.0 * (PI / 12.0 * y).sin() + 300.0 * (PI / 30.0 * y).sin();
-    let y_t = 300.0 + y + 2.0 * x + 0.1 * y * y + 0.1 * x * y + 0.1 * y.abs().sqrt()
+    let y_t = 300.0
+        + y
+        + 2.0 * x
+        + 0.1 * y * y
+        + 0.1 * x * y
+        + 0.1 * y.abs().sqrt()
         + 2.0 / 3.0 * (r + y_p + y_q);
 
     (x_t, y_t)
@@ -25,10 +35,10 @@ fn is_outside_china(lat: f64, lon: f64) -> bool {
 /// Convert a WGS-84 coordinate into GCJ-02
 pub fn wgs_to_gcj(lat: f64, lon: f64) -> (f64, f64) {
     /* Krasovsky 1940
-        a = 6378245.0, 1/f = 298.3
-        b = a * (1 - f)
-        ee = (a^2 - b^2) / a^2;
-     */
+       a = 6378245.0, 1/f = 298.3
+       b = a * (1 - f)
+       ee = (a^2 - b^2) / a^2;
+    */
     const A: f64 = 6378245.0;
     const EE: f64 = 0.00669342162296594323;
 
@@ -96,13 +106,43 @@ pub fn wgs_to_bd(lat: f64, lon: f64) -> (f64, f64) {
     (lat, lon)
 }
 
+/// Describes a coordinate system.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum GeodeticSystem {
+    Wgs84,
+    Gcj02,
+    Bd09,
+}
+
+impl GeodeticSystem {
+    /// Converts a coordinate to the target system.
+    pub fn convert_to(self, target: Self, lat: f64, lon: f64) -> (f64, f64) {
+        use GeodeticSystem::*;
+        match (self, target) {
+            (x, y) if x == y => (lat, lon),
+            (Wgs84, Gcj02) => wgs_to_gcj(lat, lon),
+            (Wgs84, Bd09) => wgs_to_bd(lat, lon),
+            (Gcj02, Wgs84) => gcj_to_wgs(lat, lon),
+            (Gcj02, Bd09) => gcj_to_bd(lat, lon),
+            (Bd09, Wgs84) => bd_to_wgs(lat, lon),
+            (Bd09, Gcj02) => bd_to_gcj(lat, lon),
+            _ => unreachable!(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     fn loc_assert((x, y): (f64, f64), (p, q): (f64, f64)) {
         let eps_assert = |x: f64, y: f64, var: &str| {
             let diff = (x - y).abs();
-            assert!(diff < 1e-6, "{} = {}, {} expected, diff = {}",
-                var, x, y, diff
+            assert!(
+                diff < 1e-6,
+                "{} = {}, {} expected, diff = {}",
+                var,
+                x,
+                y,
+                diff
             );
         };
 

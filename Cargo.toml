@@ -1,7 +1,8 @@
 [package]
 name = "undrift_gps"
-version = "0.1.1"
+version = "0.2.1"
 authors = ["Hugh Wang <hghwng@gmail.com>"]
+edition = "2018"
 
 description = "Convert between various coordinate systems: GCJ-02, WGS-84 and BD-09"
 license = "MIT"
