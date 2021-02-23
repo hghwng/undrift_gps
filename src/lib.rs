@@ -1,5 +1,7 @@
 use std::f64::consts::PI;
 
+pub mod baidu_mercator;
+
 const PI_X: f64 = std::f64::consts::PI * 3000.0 / 180.0;
 
 fn wgs_encrypt(x: f64, y: f64) -> (f64, f64) {
@@ -132,20 +134,20 @@ impl GeodeticSystem {
 }
 
 #[cfg(test)]
-mod tests {
-    fn loc_assert((x, y): (f64, f64), (p, q): (f64, f64)) {
-        let eps_assert = |x: f64, y: f64, var: &str| {
-            let diff = (x - y).abs();
-            assert!(
-                diff < 1e-6,
-                "{} = {}, {} expected, diff = {}",
-                var,
-                x,
-                y,
-                diff
-            );
-        };
+mod test {
+    pub fn eps_assert(x: f64, y: f64, var: &str) {
+        let diff = (x - y).abs();
+        assert!(
+            diff < 1e-6,
+            "{} = {}, {} expected, diff = {}",
+            var,
+            x,
+            y,
+            diff
+        );
+    }
 
+    fn loc_assert((x, y): (f64, f64), (p, q): (f64, f64)) {
         eps_assert(x, p, "lat");
         eps_assert(y, q, "lon");
     }

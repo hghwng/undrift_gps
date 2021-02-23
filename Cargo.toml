@@ -1,6 +1,6 @@
 [package]
 name = "undrift_gps"
-version = "0.2.1"
+version = "0.3.1"
 authors = ["Hugh Wang <hghwng@gmail.com>"]
 edition = "2018"
 
